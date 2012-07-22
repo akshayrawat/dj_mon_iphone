@@ -23,9 +23,9 @@ class ProjectsController < UITableViewController
   end
 
   def tableView(tableView, didSelectRowAtIndexPath:indexPath)
-    @delayedJobsController ||= DelayedJobsController.alloc.init
-    @delayedJobsController.selectedProject(@projects[indexPath.row])
-    self.navigationController.pushViewController(@delayedJobsController, animated: true)
+    @projectController ||= ProjectController.alloc.init
+    @projectController.selectedProject(@projects[indexPath.row])
+    self.navigationController.pushViewController(@projectController, animated: true)
     tableView.deselectRowAtIndexPath(indexPath, animated: true)
   end
 
