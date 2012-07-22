@@ -2,27 +2,31 @@ class ProjectsController < UITableViewController
 
   def viewDidLoad
     super
-    view.dataSource = self
+    view.dataSource = view.delegate = self
     navigationItem.title = "Projects"
+    @projects = 5.times.collect {|i| "Project #{i}"}
   end
 
-  def numberOfSectionsInTableView(tableView)
-    1
-  end
-
-  CELL_ID = "projects"
+  CELL_ID = "ProjectsTableCell"
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
     cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID) || begin
       cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID)
       cell.selectionStyle = UITableViewCellSelectionStyleBlue
       cell
     end
-    cell.textLabel.text = "My Project"
+    cell.textLabel.text = @projects[indexPath.row]
     cell
   end
 
   def tableView(tableView, numberOfRowsInSection:section)
-    4
+    @projects.size
+  end
+
+  def tableView(tableView, didSelectRowAtIndexPath:indexPath)
+    @delayedJobsController ||= DelayedJobsController.alloc.init
+    @delayedJobsController.selectedProject(@projects[indexPath.row])
+    self.navigationController.pushViewController(@delayedJobsController, animated: true)
+    tableView.deselectRowAtIndexPath(indexPath, animated: true)
   end
 
 end
