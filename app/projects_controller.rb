@@ -4,15 +4,21 @@ class ProjectsController < UITableViewController
     super
     view.dataSource = view.delegate = self
     navigationItem.title = "Projects"
-    @projects = 5.times.collect {|i| "Project #{i}"}
+    navigationItem.leftBarButtonItem = editButtonItem
+    navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithBarButtonSystemItem(UIBarButtonSystemItemAdd, target:self, action: 'addProject')
+  end
+
+  def viewWillAppear(animated)
+    super
+    @projects ||= 5.times.collect {|i| "Project #{i}"}
   end
 
   CELL_ID = "ProjectsTableCell"
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
     cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID) || begin
-      cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID)
-      cell.selectionStyle = UITableViewCellSelectionStyleBlue
-      cell
+    cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID)
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue
+    cell
     end
     cell.textLabel.text = @projects[indexPath.row]
     cell
@@ -27,6 +33,20 @@ class ProjectsController < UITableViewController
     @projectController.selectedProject(@projects[indexPath.row])
     self.navigationController.pushViewController(@projectController, animated: true)
     tableView.deselectRowAtIndexPath(indexPath, animated: true)
+  end
+
+  def tableView(tableView, editingStyleForRowAtIndexPath:indexPath)
+    UITableViewCellEditingStyleDelete
+  end
+
+  def tableView(tableView, commitEditingStyle:editingStyle, forRowAtIndexPath:indexPath)
+    @projects.delete_at indexPath.row
+    tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation:UITableViewRowAnimationFade)
+  end
+
+  def addProject
+    @projects << "Project #{Time.now}"
+    view.reloadData
   end
 
 end
