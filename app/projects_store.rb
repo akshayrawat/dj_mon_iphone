@@ -26,6 +26,7 @@ class ProjectsStore
     store = NSPersistentStoreCoordinator.alloc.initWithManagedObjectModel(model)
     store_url = NSURL.fileURLWithPath(File.join(NSHomeDirectory(), 'Documents', 'DJMon.sqlite'))
     error_ptr = Pointer.new(:object)
+
     unless store.addPersistentStoreWithType(NSSQLiteStoreType, configuration:nil, URL:store_url, options:nil, error:error_ptr)
       raise "Can't add persistent SQLite store: #{error_ptr[0].description}"
     end

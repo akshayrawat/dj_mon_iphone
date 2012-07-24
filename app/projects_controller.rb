@@ -45,8 +45,8 @@ class ProjectsController < UITableViewController
   end
 
   def addProject
-    @projects << "Project #{Time.now}"
-    view.reloadData
+    @newProjectController ||= NewProjectController.alloc.init
+    self.navigationController.pushViewController(@newProjectController, animated: true)
   end
 
 end
