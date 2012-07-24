@@ -5,22 +5,24 @@ class ProjectsController < UITableViewController
     view.dataSource = view.delegate = self
     navigationItem.title = "Projects"
     navigationItem.leftBarButtonItem = editButtonItem
-    navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithBarButtonSystemItem(UIBarButtonSystemItemAdd, target:self, action: 'addProject')
+    navigationItem.rightBarButtonItem = UIBarButtonItem.alloc.initWithBarButtonSystemItem(UIBarButtonSystemItemAdd, target:self, action: 'newProject')
   end
 
   def viewWillAppear(animated)
     super
-    @projects ||= ProjectsStore.shared.projects
+    @projects = ProjectsStore.shared.projects
+    tableView.reloadData
   end
 
   CELL_ID = "ProjectsTableCell"
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
+    puts indexPath.row
     cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID) || begin
     cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID)
     cell.selectionStyle = UITableViewCellSelectionStyleBlue
     cell
     end
-    cell.textLabel.text = @projects[indexPath.row]
+    cell.textLabel.text = @projects[indexPath.row].name
     cell
   end
 
@@ -44,7 +46,7 @@ class ProjectsController < UITableViewController
     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation:UITableViewRowAnimationFade)
   end
 
-  def addProject
+  def newProject
     @newProjectController ||= NewProjectController.alloc.init
     self.navigationController.pushViewController(@newProjectController, animated: true)
   end

@@ -6,7 +6,8 @@ class Project < NSManagedObject
                     entity.name = 'Project'
                     entity.managedObjectClassName = 'Project'
                     entity.properties = 
-                      [ 'djMonURL', NSStringAttributeType,
+                      [ 'name',     NSStringAttributeType,
+                        'djMonURL', NSStringAttributeType,
                         'username', NSStringAttributeType,
                         'password', NSStringAttributeType ].each_slice(2).map do |name, type|
                           NSAttributeDescription.alloc.init.tap do |property|

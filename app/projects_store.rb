@@ -18,6 +18,19 @@ class ProjectsStore
                   end
   end
 
+  def newProject
+    yield NSEntityDescription.insertNewObjectForEntityForName('Project', inManagedObjectContext:@context)
+    save
+  end
+
+  def save
+    errorPtr = Pointer.new(:object)
+    unless @context.save(errorPtr)
+      raise "Error when saving the model: #{errorPtr[0].description}"
+    end
+    @projects = nil
+  end
+
   private
 
   def initialize

@@ -9,6 +9,7 @@ class NewProjectController < UIViewController
 
     @tableView.delegate = @tableView.dataSource = self
 
+    @name     = buildTextFieldWithPlaceholder("Project name", keyboardType:UIKeyboardTypeAlphabet, returnKeyType:UIReturnKeyNext, isSecure:false)
     @djMonURL = buildTextFieldWithPlaceholder("URL eg: http://yourapp.com/dj_mon", keyboardType:UIKeyboardTypeURL, returnKeyType:UIReturnKeyNext, isSecure:false)
     @username = buildTextFieldWithPlaceholder("Username", keyboardType:UIKeyboardTypeAlphabet, returnKeyType:UIReturnKeyNext, isSecure:false)
     @password = buildTextFieldWithPlaceholder("Password", keyboardType:UIKeyboardTypeAlphabet, returnKeyType:UIReturnKeyDone, isSecure:true)
@@ -17,7 +18,7 @@ class NewProjectController < UIViewController
   end
 
   def tableView(tableView, numberOfRowsInSection:section)
-    3
+    4
   end
 
   CELL_ID = "NewProjectTableCell"
@@ -26,16 +27,28 @@ class NewProjectController < UIViewController
     UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID).tap do |cell|
       cell.accessoryType = UITableViewCellAccessoryNone
       cell.selectionStyle = UITableViewCellSelectionStyleNone
-      cell.addSubview @djMonURL if indexPath.row == 0
-      cell.addSubview @username if indexPath.row == 1
-      cell.addSubview @password if indexPath.row == 2
+
+      cell.addSubview @name     if indexPath.row == 0
+      cell.addSubview @djMonURL if indexPath.row == 1
+      cell.addSubview @username if indexPath.row == 2
+      cell.addSubview @password if indexPath.row == 3
     end
     end
   end
 
   def textFieldShouldReturn(textField)
+    changeFirstResponderTo(@djMonURL, from:@name) if textField == @name
     changeFirstResponderTo(@username, from:@djMonURL) if textField == @djMonURL
     changeFirstResponderTo(@password, from:@username) if textField == @username
+    if textField == @password
+      ProjectsStore.shared.newProject do |project|
+        project.name = @name.text
+        project.djMonURL = @djMonURL.text
+        project.username = @username.text
+        project.password = @password.text
+      end
+     navigationController.popViewControllerAnimated(true)
+    end
     false
   end
 
