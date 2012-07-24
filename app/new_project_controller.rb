@@ -34,16 +34,13 @@ class NewProjectController < UIViewController
   end
 
   def textFieldShouldReturn(textField)
-    if textField == @djMonURL
-      @djMonURL.resignFirstResponder
-      @username.becomeFirstResponder
-      return false
-    elsif textField == @username
-      @username.resignFirstResponder
-      @password.becomeFirstResponder
-      return false
-    end
-    true
+    changeFirstResponderTo(@username, from:@djMonURL) if textField == @djMonURL
+    changeFirstResponderTo(@password, from:@username) if textField == @username
+    false
+  end
+
+  def textFieldShouldEndEditing(textField)
+    !textField.text.strip.empty?
   end
 
   def tableView(tableView, titleForHeaderInSection:section)
@@ -59,6 +56,11 @@ class NewProjectController < UIViewController
   end
 
   private
+
+  def changeFirstResponderTo(to, from:from)
+    from.resignFirstResponder
+    to.becomeFirstResponder
+  end
 
   def buildTextFieldWithPlaceholder(placeholder, keyboardType:keyboardType, returnKeyType:returnKeyType, isSecure:isSecure)
     UITextField.alloc.initWithFrame([[20, 10], [275, 30]]).tap do |field|
