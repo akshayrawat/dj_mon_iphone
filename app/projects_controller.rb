@@ -10,7 +10,7 @@ class ProjectsController < UITableViewController
 
   def viewWillAppear(animated)
     super
-    @projects ||= 5.times.collect {|i| "Project #{i}"}
+    @projects ||= ProjectsStore.shared.projects
   end
 
   CELL_ID = "ProjectsTableCell"
@@ -25,7 +25,7 @@ class ProjectsController < UITableViewController
   end
 
   def tableView(tableView, numberOfRowsInSection:section)
-    @projects.size
+    ProjectsStore.shared.projects.size
   end
 
   def tableView(tableView, didSelectRowAtIndexPath:indexPath)
