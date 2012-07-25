@@ -10,7 +10,6 @@ class ProjectsController < UITableViewController
 
   def viewWillAppear(animated)
     super
-    @projects = ProjectsStore.shared.projects
     tableView.reloadData
   end
 
@@ -22,7 +21,7 @@ class ProjectsController < UITableViewController
     cell.selectionStyle = UITableViewCellSelectionStyleBlue
     cell
     end
-    cell.textLabel.text = @projects[indexPath.row].name
+    cell.textLabel.text = projects[indexPath.row].name
     cell
   end
 
@@ -32,7 +31,7 @@ class ProjectsController < UITableViewController
 
   def tableView(tableView, didSelectRowAtIndexPath:indexPath)
     @projectController ||= ProjectController.alloc.init
-    @projectController.selectedProject(@projects[indexPath.row])
+    @projectController.selectedProject(projects[indexPath.row])
     self.navigationController.pushViewController(@projectController, animated: true)
     tableView.deselectRowAtIndexPath(indexPath, animated: true)
   end
@@ -42,13 +41,18 @@ class ProjectsController < UITableViewController
   end
 
   def tableView(tableView, commitEditingStyle:editingStyle, forRowAtIndexPath:indexPath)
-    @projects.delete_at indexPath.row
+    project = projects[indexPath.row]
+    ProjectsStore.shared.deleteProject(project)
     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation:UITableViewRowAnimationFade)
   end
 
   def newProject
     @newProjectController ||= NewProjectController.alloc.init
     self.navigationController.pushViewController(@newProjectController, animated: true)
+  end
+
+  def projects
+    ProjectsStore.shared.projects
   end
 
 end

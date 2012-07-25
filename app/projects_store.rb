@@ -23,6 +23,11 @@ class ProjectsStore
     save
   end
 
+  def deleteProject project
+    @context.deleteObject project
+    save
+  end
+
   def save
     errorPtr = Pointer.new(:object)
     unless @context.save(errorPtr)
