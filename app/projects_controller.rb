@@ -15,7 +15,6 @@ class ProjectsController < UITableViewController
 
   CELL_ID = "ProjectsTableCell"
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
-    puts indexPath.row
     cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID) || begin
     cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID)
     cell.selectionStyle = UITableViewCellSelectionStyleBlue

@@ -40,7 +40,24 @@ class NewProjectController < UIViewController
     changeFirstResponderTo(@djMonURL, from:@name) if textField == @name
     changeFirstResponderTo(@username, from:@djMonURL) if textField == @djMonURL
     changeFirstResponderTo(@password, from:@username) if textField == @username
-    authenticate if textField == @password
+
+    if textField == @password
+      request = APIAuthenticationRequest.new(@djMonURL.text, @username.text, @password.text)
+      request.onSuccess do
+        ProjectsStore.shared.newProject do |project|
+          project.name = @name.text
+          project.djMonURL = @djMonURL.text
+          project.username = @username.text
+          project.password = @password.text
+          navigationController.popViewControllerAnimated(true)
+        end
+      end
+      request.onFailure do
+        alertView = UIAlertView.alloc.initWithTitle("Authentication failure", message:"Invalid username or password", delegate:nil, cancelButtonTitle:"Ok", otherButtonTitles:nil)
+        alertView.show
+      end
+      request.execute
+    end
     false
   end
 
@@ -60,43 +77,9 @@ class NewProjectController < UIViewController
     true
   end
 
-  #NSURLConnectionDelegate methods
-  def connection(connection, didReceiveResponse:response)
-    @data = NSMutableData.alloc.init
-  end
-
-  def connection(connection, didReceiveData:data)
-    @data.appendData(data)
-  end
-
-  def connectionDidFinishLoading(connection)
-    ProjectsStore.shared.newProject do |project|
-      project.name = @name.text
-      project.djMonURL = @djMonURL.text
-      project.username = @username.text
-      project.password = @password.text
-    end
-    navigationController.popViewControllerAnimated(true)
-  end
-
-  def connection(connection, didFailWithError:error)
-    @connection = nil
-    @data = nil
-    alertView = UIAlertView.alloc.initWithTitle("Authentication failure", message:"Invalid username or password", delegate:nil, cancelButtonTitle:"Ok", otherButtonTitles:nil)
-    alertView.show
-  end
-
   private
 
   def authenticate
-    authData = "#{@username.text}:#{@password.text}".dataUsingEncoding(NSASCIIStringEncoding)
-    authValue = "Basic #{authData.base64Encoding}"
-
-    url = NSURL.URLWithString(@djMonURL.text)
-    request = NSMutableURLRequest.alloc.initWithURL url
-    request.setHTTPMethod("GET")
-    request.setValue(authValue, forHTTPHeaderField:"Authorization")
-    @connection = NSURLConnection.alloc.initWithRequest(request, delegate:self)
   end
 
 
