@@ -15,12 +15,9 @@ class ProjectsController < UITableViewController
 
   CELL_ID = "ProjectsTableCell"
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
-    cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID) || begin
-      UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID).tap do |cell|
-        cell.selectionStyle = UITableViewCellSelectionStyleBlue
-        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton
-      end
-    end
+    cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID) || UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID)
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue
+    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton
     cell.textLabel.text = projects[indexPath.row].name
     cell
   end
