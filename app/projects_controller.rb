@@ -30,7 +30,7 @@ class ProjectsController < UITableViewController
   end
 
   def tableView(tableView, didSelectRowAtIndexPath:indexPath)
-    @projectController ||= ProjectController.alloc.init
+    @projectController ||= ProjectController.alloc.initWithStyle(UITableViewStyleGrouped)
     @projectController.selectedProject(projects[indexPath.row])
     self.navigationController.pushViewController(@projectController, animated: true)
     tableView.deselectRowAtIndexPath(indexPath, animated: true)

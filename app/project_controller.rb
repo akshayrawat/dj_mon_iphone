@@ -34,19 +34,13 @@ class ProjectController < UITableViewController
   CELL_ID = "ProjectTableCell"
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
     cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID) || begin
-      UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID).tap do |cell|
+      UITableViewCell.alloc.initWithStyle(UITableViewCellStyleValue1, reuseIdentifier:CELL_ID).tap do |cell|
         cell.selectionStyle = UITableViewCellSelectionStyleBlue
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator
       end
     end
-    cell.textLabel.text = @project.delayedJobCounts.keys[indexPath.row].capitalize
-    countView = UILabel.alloc.initWithFrame([[210, 12], [70, 20]])
-    countView.font = UIFont.boldSystemFontOfSize(14)
-    countView.textColor = UIColor.grayColor
-    countView.textAlignment = UITextAlignmentCenter
-
-    countView.text = "#{@project.delayedJobCounts.values[indexPath.row].to_s} Jobs"
-    cell.contentView.addSubview(countView)
+    cell.textLabel.text = @project.delayedJobCounts.keys[indexPath.row].to_s.capitalize
+    cell.detailTextLabel.text = @project.delayedJobCounts.values[indexPath.row].to_s.capitalize
     cell
   end
 
@@ -65,6 +59,10 @@ class ProjectController < UITableViewController
     @projectSettingsController ||= ProjectSettingsController.alloc.initWithStyle(UITableViewStyleGrouped)
     @projectSettingsController.selectedProject(@project)
     self.navigationController.pushViewController(@projectSettingsController, animated: true)
+  end
+
+  def tableView(tableView, titleForHeaderInSection:section)
+    "Delayed Jobs"
   end
 
 end
