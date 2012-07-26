@@ -31,9 +31,10 @@ class ProjectController < UITableViewController
   CELL_ID = "ProjectTableCell"
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
     cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID) || begin
-    cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID)
-    cell.selectionStyle = UITableViewCellSelectionStyleBlue
-    cell
+      UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID).tap do |cell|
+        cell.selectionStyle = UITableViewCellSelectionStyleBlue
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton
+      end
     end
     cell.textLabel.text = "#{@project.delayedJobCounts.keys[indexPath.row].capitalize} #{@project.delayedJobCounts.values[indexPath.row]}"
     cell
