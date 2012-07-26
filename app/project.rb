@@ -1,6 +1,6 @@
 class Project < NSManagedObject
 
-  attr_accessor :delayedJobCounts
+  attr_accessor :delayedJobCounts, :settings
 
   def self.entity
     @entity ||= begin
@@ -23,11 +23,11 @@ class Project < NSManagedObject
   end
 
   def awakeFromInsert
-    @delayedJobCounts = {}
+    @delayedJobCounts, @settings = {}, {}
   end
 
   def awakeFromFetch
-    @delayedJobCounts = {}
+    @delayedJobCounts, @settings = {}, {}
   end
 
 end

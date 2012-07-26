@@ -9,6 +9,9 @@ class ProjectController < UITableViewController
 
     view.dataSource = view.delegate = self
     navigationItem.title = "Delayed Jobs"
+
+    @projectSettings = UIBarButtonItem.alloc.initWithTitle("Settings", style:UIBarButtonItemStylePlain, target:self, action:'showSettings')
+    navigationItem.rightBarButtonItem = @projectSettings
   end
 
   def viewWillAppear(animated)
@@ -56,6 +59,12 @@ class ProjectController < UITableViewController
     @delayedJobsController.selectedProject(@project)
     self.navigationController.pushViewController(@delayedJobsController, animated: true)
     tableView.deselectRowAtIndexPath(indexPath, animated: true)
+  end
+
+  def showSettings
+    @projectSettingsController ||= ProjectSettingsController.alloc.initWithStyle(UITableViewStyleGrouped)
+    @projectSettingsController.selectedProject(@project)
+    self.navigationController.pushViewController(@projectSettingsController, animated: true)
   end
 
 end
