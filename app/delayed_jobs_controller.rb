@@ -1,42 +1,30 @@
 class DelayedJobsController < UITableViewController
 
-  def selectedProject project
+  def selectedStatus(status, forProject:project)
+    @project, @status = project, status
   end
 
   def viewDidLoad
     super
     view.dataSource = view.delegate = self
-    navigationItem.title = "Failed"
-    @delayedJobs = [
-      { 
-        id: 1,
-        payload: "some payload",
-        priority: 1,
-        attempts: 2,
-        queue: "global",
-        last_error_summary: "some last error summary",
-        last_error: "some last error",
-        failed_at: Time.now,
-        run_at: Time.now,
-        created_at: Time.now,
-        failed: true
-      },
+  end
 
-      {
-        id: 2,
-        payload: "another payload",
-        priority: 1,
-        attempts: 2,
-        queue: "global",
-        last_error_summary: "another last error summary",
-        last_error: "another last error",
-        failed_at: Time.now,
-        run_at: Time.now,
-        created_at: Time.now,
-        failed: true
-      },
+  def viewWillAppear(animated)
+    super
+    navigationItem.title = "#{@status.capitalize} Jobs"
 
-    ]
+    @request = APIRequest.new("#{@project.djMonURL}/dj_reports/#{@status}", @project.username, @project.password)
+    @request.execute
+
+    @request.onSuccess do |data|
+      @project.delayedJobs = data
+      tableView.reloadData
+    end
+
+    @request.onFailure do
+      alertView = UIAlertView.alloc.initWithTitle("API Request failed", message:"API Request failed", delegate:nil, cancelButtonTitle:"Ok", otherButtonTitles:nil)
+      alertView.show
+    end
   end
 
   CELL_ID = "DelayedJobsTableCell"
@@ -44,22 +32,16 @@ class DelayedJobsController < UITableViewController
     cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID) || begin
       cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID)
       cell.selectionStyle = UITableViewCellSelectionStyleBlue
+      cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator
       cell
     end
-    job = @delayedJobs[indexPath.row]
+    job = @project.delayedJobs[indexPath.row]
     cell.textLabel.text = "ID:#{job[:id]}, Queue:#{job[:queue]}"
     cell
   end
 
   def tableView(tableView, numberOfRowsInSection:section)
-    @delayedJobs.size
-  end
-
-  def tableView(tableView, didSelectRowAtIndexPath:indexPath)
-    @projectController ||= ProjectController.alloc.init
-    @projectController.selectedProject(@projects[indexPath.row])
-    self.navigationController.pushViewController(@projectController, animated: true)
-    tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    @project.delayedJobs.size
   end
 
 end

@@ -39,7 +39,7 @@ class ProjectController < UITableViewController
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator
       end
     end
-    cell.textLabel.text = @project.delayedJobCounts.keys[indexPath.row].to_s.capitalize
+    cell.textLabel.text = @project.delayedJobCounts.keys[indexPath.row].capitalize
     cell.detailTextLabel.text = @project.delayedJobCounts.values[indexPath.row].to_s.capitalize
     cell
   end
@@ -50,7 +50,7 @@ class ProjectController < UITableViewController
 
   def tableView(tableView, didSelectRowAtIndexPath:indexPath)
     @delayedJobsController ||= DelayedJobsController.alloc.init
-    @delayedJobsController.selectedProject(@project)
+    @delayedJobsController.selectedStatus(@project.delayedJobCounts.keys[indexPath.row], forProject:@project)
     self.navigationController.pushViewController(@delayedJobsController, animated: true)
     tableView.deselectRowAtIndexPath(indexPath, animated: true)
   end
