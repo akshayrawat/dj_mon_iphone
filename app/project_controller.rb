@@ -8,11 +8,13 @@ class ProjectController < UITableViewController
     super
     view.dataSource = view.delegate = self
     navigationItem.title = "Delayed Jobs"
-    @delayedJobs = {
-      failed: 2,
-      active: 3,
-      queued: 4
-    }
+  end
+
+  def viewWillAppear(animated)
+    super
+    APIDelayedJobCountRequest.new(@project).execute do
+      tableView.reloadData
+    end
   end
 
   CELL_ID = "ProjectTableCell"
@@ -22,16 +24,16 @@ class ProjectController < UITableViewController
     cell.selectionStyle = UITableViewCellSelectionStyleBlue
     cell
     end
-    cell.textLabel.text = "#{@delayedJobs.keys[indexPath.row]} #{@delayedJobs.values[indexPath.row]}"
+    cell.textLabel.text = "#{@project.delayedJobCounts.keys[indexPath.row]} #{@project.delayedJobCounts.values[indexPath.row]}"
     cell
   end
 
   def tableView(tableView, numberOfRowsInSection:section)
-    @delayedJobs.size
+    @project.delayedJobCounts.size
   end
 
   def tableView(tableView, didSelectRowAtIndexPath:indexPath)
-    @delayedJobsController||= DelayedJobsController.alloc.init
+    @delayedJobsController ||= DelayedJobsController.alloc.init
     @delayedJobsController.selectedProject(@project)
     self.navigationController.pushViewController(@delayedJobsController, animated: true)
     tableView.deselectRowAtIndexPath(indexPath, animated: true)

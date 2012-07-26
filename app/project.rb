@@ -1,5 +1,7 @@
 class Project < NSManagedObject
 
+  attr_accessor :delayedJobCounts
+
   def self.entity
     @entity ||= begin
                   NSEntityDescription.alloc.init.tap do |entity|
@@ -18,6 +20,14 @@ class Project < NSManagedObject
                         end
                   end
                 end
+  end
+
+  def awakeFromInsert
+    @delayedJobCounts = {}
+  end
+
+  def awakeFromFetch
+    @delayedJobCounts = {}
   end
 
 end
