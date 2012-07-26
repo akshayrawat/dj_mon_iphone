@@ -25,7 +25,7 @@ class ProjectsController < UITableViewController
   end
 
   def tableView(tableView, numberOfRowsInSection:section)
-    ProjectsStore.shared.projects.size
+    projects.size
   end
 
   def tableView(tableView, didSelectRowAtIndexPath:indexPath)

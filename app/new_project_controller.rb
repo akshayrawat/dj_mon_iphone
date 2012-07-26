@@ -52,8 +52,8 @@ class NewProjectController < UIViewController
           project.djMonURL = @djMonURL.text
           project.username = @username.text
           project.password = @password.text
-          navigationController.popViewControllerAnimated(true)
         end
+        navigationController.popViewControllerAnimated(true)
         @progressIndicator.hide
       end
       request.onFailure do
