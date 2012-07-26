@@ -7,11 +7,11 @@ class APIAuthenticationRequest
   def execute
     authData = "#{@username}:#{@password}".dataUsingEncoding(NSASCIIStringEncoding)
     authValue = "Basic #{authData.base64Encoding}"
-
     url = NSURL.URLWithString(@djMonURL)
     request = NSMutableURLRequest.alloc.initWithURL url
     request.setHTTPMethod("GET")
     request.setValue(authValue, forHTTPHeaderField:"Authorization")
+
     @connection = NSURLConnection.alloc.initWithRequest(request, delegate:self)
   end
 
@@ -24,6 +24,7 @@ class APIAuthenticationRequest
   end
 
   def connection(connection, didReceiveResponse:response)
+    @success = response.statusCode == 200 && response.allHeaderFields.keys.map(&:upcase).include?('DJ-MON-VERSION')
     @data = NSMutableData.alloc.init
   end
 
@@ -32,7 +33,7 @@ class APIAuthenticationRequest
   end
 
   def connectionDidFinishLoading(connection)
-    @successHandler.call
+    @success ? @successHandler.call : @failureHandler.call
   end
 
   def connection(connection, didFailWithError:error)
