@@ -33,10 +33,17 @@ class ProjectController < UITableViewController
     cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID) || begin
       UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID).tap do |cell|
         cell.selectionStyle = UITableViewCellSelectionStyleBlue
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton
       end
     end
-    cell.textLabel.text = "#{@project.delayedJobCounts.keys[indexPath.row].capitalize} #{@project.delayedJobCounts.values[indexPath.row]}"
+    cell.textLabel.text = @project.delayedJobCounts.keys[indexPath.row].capitalize
+    countView = UILabel.alloc.initWithFrame([[210, 12], [70, 20]])
+    countView.font = UIFont.boldSystemFontOfSize(14)
+    countView.textColor = UIColor.grayColor
+    countView.textAlignment = UITextAlignmentCenter
+
+    countView.text = "#{@project.delayedJobCounts.values[indexPath.row].to_s} Jobs"
+    cell.contentView.addSubview(countView)
     cell
   end
 

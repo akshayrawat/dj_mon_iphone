@@ -84,10 +84,6 @@ class NewProjectController < UIViewController
     "The URL must be the complete path to DJ Mon, eg: http://yourapp.com/dj_mon"
   end
 
-  def shouldAutorotateToInterfaceOrientation(interfaceOrientation)
-    true
-  end
-
   private
 
   def changeFirstResponderTo(to, from:from)
