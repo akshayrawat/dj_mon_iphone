@@ -18,7 +18,7 @@ class ProjectsController < UITableViewController
     cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID) || begin
       UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID).tap do |cell|
         cell.selectionStyle = UITableViewCellSelectionStyleBlue
-        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator
       end
     end
     cell.textLabel.text = projects[indexPath.row].name
