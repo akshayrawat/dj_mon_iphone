@@ -13,9 +13,14 @@ class NewProjectController < UIViewController
     @djMonURL = buildTextFieldWithPlaceholder("URL eg: http://yourapp.com/dj_mon", keyboardType:UIKeyboardTypeURL, returnKeyType:UIReturnKeyNext, isSecure:false)
     @username = buildTextFieldWithPlaceholder("Username", keyboardType:UIKeyboardTypeAlphabet, returnKeyType:UIReturnKeyNext, isSecure:false)
     @password = buildTextFieldWithPlaceholder("Password", keyboardType:UIKeyboardTypeAlphabet, returnKeyType:UIReturnKeyDone, isSecure:true)
+    #@password.enablesReturnKeyAutomatically = true
 
     view.addSubview @tableView
     @progressIndicator = ProgressIndicator.new(view, "Authenticating")
+  end
+
+  def viewWillAppear(animated)
+    @name.text, @djMonURL.text, @username.text, @password.text = "", "", "", ""
   end
 
   def tableView(tableView, numberOfRowsInSection:section)
@@ -53,22 +58,18 @@ class NewProjectController < UIViewController
           project.username = @username.text
           project.password = @password.text
         end
-        navigationController.popViewControllerAnimated(true)
         @progressIndicator.hide
+        navigationController.popViewControllerAnimated(true)
       end
       request.onFailure do
         @progressIndicator.hide
-        @djMonURL.becomeFirstResponder
+        @name.becomeFirstResponder
         alertView = UIAlertView.alloc.initWithTitle("Authentication failure", message:"Invalid username or password", delegate:nil, cancelButtonTitle:"Ok", otherButtonTitles:nil)
         alertView.show
       end
       request.execute
     end
     false
-  end
-
-  def textFieldShouldEndEditing(textField)
-    !textField.text.strip.empty?
   end
 
   def tableView(tableView, titleForHeaderInSection:section)
@@ -84,10 +85,6 @@ class NewProjectController < UIViewController
   end
 
   private
-
-  def authenticate
-  end
-
 
   def changeFirstResponderTo(to, from:from)
     from.resignFirstResponder
