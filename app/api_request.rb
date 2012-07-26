@@ -1,4 +1,4 @@
-class APIAuthenticationRequest
+class APIRequest
 
   def initialize(djMonURL, username, password)
     @djMonURL, @username, @password = djMonURL, username, password
@@ -33,13 +33,19 @@ class APIAuthenticationRequest
   end
 
   def connectionDidFinishLoading(connection)
-    @success ? @successHandler.call : @failureHandler.call
+    @success ? @successHandler.call(parseJSON(@data)) : @failureHandler.call
   end
 
   def connection(connection, didFailWithError:error)
-    @connection = nil
-    @data = nil
-    @failureHandler.call
+  end
+
+  private
+
+  def parseJSON data
+    errorPtr = Pointer.new(:object)
+    json = NSJSONSerialization.JSONObjectWithData(data, options:0, error:errorPtr)
+    raise errorPtr[0] unless json
+    json
   end
 
 end

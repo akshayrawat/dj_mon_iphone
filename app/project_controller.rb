@@ -6,14 +6,25 @@ class ProjectController < UITableViewController
 
   def viewDidLoad
     super
+
     view.dataSource = view.delegate = self
     navigationItem.title = "Delayed Jobs"
   end
 
   def viewWillAppear(animated)
     super
-    APIDelayedJobCountRequest.new(@project).execute do
+
+    @request = APIRequest.new("#{@project.djMonURL}/dj_reports/dj_counts", @project.username, @project.password)
+    @request.execute
+
+    @request.onSuccess do |data|
+      @project.delayedJobCounts = data
       tableView.reloadData
+    end
+
+    @request.onFailure do
+      alertView = UIAlertView.alloc.initWithTitle("API Request failed", message:"API Request failed", delegate:nil, cancelButtonTitle:"Ok", otherButtonTitles:nil)
+      alertView.show
     end
   end
 
@@ -24,7 +35,7 @@ class ProjectController < UITableViewController
     cell.selectionStyle = UITableViewCellSelectionStyleBlue
     cell
     end
-    cell.textLabel.text = "#{@project.delayedJobCounts.keys[indexPath.row]} #{@project.delayedJobCounts.values[indexPath.row]}"
+    cell.textLabel.text = "#{@project.delayedJobCounts.keys[indexPath.row].capitalize} #{@project.delayedJobCounts.values[indexPath.row]}"
     cell
   end
 

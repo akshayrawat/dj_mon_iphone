@@ -50,8 +50,10 @@ class NewProjectController < UIViewController
     if textField == @password
       @password.resignFirstResponder
       @progressIndicator.show
-      request = APIAuthenticationRequest.new(@djMonURL.text, @username.text, @password.text)
-      request.onSuccess do
+
+      @request = APIRequest.new("#{@djMonURL.text}/dj_reports/dj_counts", @username.text, @password.text)
+
+      @request.onSuccess do
         ProjectsStore.shared.newProject do |project|
           project.name = @name.text
           project.djMonURL = @djMonURL.text
@@ -61,13 +63,15 @@ class NewProjectController < UIViewController
         @progressIndicator.hide
         navigationController.popViewControllerAnimated(true)
       end
-      request.onFailure do
+
+      @request.onFailure do
         @progressIndicator.hide
         @name.becomeFirstResponder
         alertView = UIAlertView.alloc.initWithTitle("Authentication failure", message:"Invalid username or password", delegate:nil, cancelButtonTitle:"Ok", otherButtonTitles:nil)
         alertView.show
       end
-      request.execute
+
+      @request.execute
     end
     false
   end
