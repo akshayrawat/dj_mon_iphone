@@ -14,7 +14,8 @@ class NewProjectController < UIViewController
     @username = buildTextFieldWithPlaceholder("Username", keyboardType:UIKeyboardTypeAlphabet, returnKeyType:UIReturnKeyNext, isSecure:false)
     @password = buildTextFieldWithPlaceholder("Password", keyboardType:UIKeyboardTypeAlphabet, returnKeyType:UIReturnKeyDone, isSecure:true)
 
-    self.view.addSubview @tableView
+    view.addSubview @tableView
+    @progressIndicator = ProgressIndicator.new(view, "Authenticating")
   end
 
   def tableView(tableView, numberOfRowsInSection:section)
@@ -42,6 +43,8 @@ class NewProjectController < UIViewController
     changeFirstResponderTo(@password, from:@username) if textField == @username
 
     if textField == @password
+      @password.resignFirstResponder
+      @progressIndicator.show
       request = APIAuthenticationRequest.new(@djMonURL.text, @username.text, @password.text)
       request.onSuccess do
         ProjectsStore.shared.newProject do |project|
@@ -51,8 +54,11 @@ class NewProjectController < UIViewController
           project.password = @password.text
           navigationController.popViewControllerAnimated(true)
         end
+        @progressIndicator.hide
       end
       request.onFailure do
+        @progressIndicator.hide
+        @djMonURL.becomeFirstResponder
         alertView = UIAlertView.alloc.initWithTitle("Authentication failure", message:"Invalid username or password", delegate:nil, cancelButtonTitle:"Ok", otherButtonTitles:nil)
         alertView.show
       end
