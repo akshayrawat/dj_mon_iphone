@@ -37,6 +37,7 @@ class APIRequest
   end
 
   def connection(connection, didFailWithError:error)
+    @failureHandler.call
   end
 
   private

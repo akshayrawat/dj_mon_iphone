@@ -76,10 +76,6 @@ class NewProjectController < UIViewController
     false
   end
 
-  def tableView(tableView, titleForHeaderInSection:section)
-    "DJ Mon Credentials"
-  end
-
   def tableView(tableView, titleForFooterInSection:section)
     "The URL must be the complete path to DJ Mon, eg: http://yourapp.com/dj_mon"
   end
