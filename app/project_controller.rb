@@ -35,7 +35,7 @@ class ProjectController < UITableViewController
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
     cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID) || begin
       UITableViewCell.alloc.initWithStyle(UITableViewCellStyleValue1, reuseIdentifier:CELL_ID).tap do |cell|
-        cell.selectionStyle = UITableViewCellSelectionStyleBlue
+        cell.selectionStyle = UITableViewCellSelectionStyleGray
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator
       end
     end

@@ -30,14 +30,15 @@ class DelayedJobsController < UITableViewController
   CELL_ID = "DelayedJobsTableCell"
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
     cell = tableView.dequeueReusableCellWithIdentifier(CELL_ID) || begin
-      cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:CELL_ID)
-      cell.selectionStyle = UITableViewCellSelectionStyleBlue
+      cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleSubtitle, reuseIdentifier:CELL_ID)
+      cell.selectionStyle = UITableViewCellSelectionStyleGray
       cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator
       cell
     end
     queue = @project.delayedJobs.keys[indexPath.section]
     job = @project.delayedJobs[queue][indexPath.row]
-    cell.textLabel.text = "ID:#{job[:id]},#{job[:queue]} "
+    cell.textLabel.text = "#{job[:created_at]} "
+    cell.detailTextLabel.text = "ID:#{job[:id]} Priority:#{job[:priority]} Attempts:#{job[:attempts]}"
     cell
   end
 
@@ -47,7 +48,6 @@ class DelayedJobsController < UITableViewController
   end
 
   def numberOfSectionsInTableView(tableView)
-    puts @project.delayedJobs.size
     @project.delayedJobs.size
   end
 
