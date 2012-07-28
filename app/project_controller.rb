@@ -62,7 +62,7 @@ class ProjectController < UITableViewController
   end
 
   def tableView(tableView, titleForHeaderInSection:section)
-    "Delayed Jobs"
+    @project.name
   end
 
 end

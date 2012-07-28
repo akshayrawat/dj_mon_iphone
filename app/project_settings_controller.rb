@@ -8,7 +8,7 @@ class ProjectSettingsController < UITableViewController
     super
 
     view.dataSource = view.delegate = self
-    navigationItem.title = "Settings"
+    navigationItem.title = "Delayed Job Settings"
   end
 
   def viewWillAppear(animated)
@@ -44,7 +44,7 @@ class ProjectSettingsController < UITableViewController
   end
 
   def tableView(tableView, titleForHeaderInSection:section)
-    "Delayed Job Settings"
+    @project.name
   end
 
 end
