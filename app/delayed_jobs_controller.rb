@@ -17,7 +17,7 @@ class DelayedJobsController < UITableViewController
     @request.execute
 
     @request.onSuccess do |data|
-      @project.delayedJobs = data
+      @project.delayedJobs = data.group_by {|d|d[:queue]}
       tableView.reloadData
     end
 
@@ -35,13 +35,24 @@ class DelayedJobsController < UITableViewController
       cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator
       cell
     end
-    job = @project.delayedJobs[indexPath.row]
-    cell.textLabel.text = "ID:#{job[:id]}, Queue:#{job[:queue]}"
+    queue = @project.delayedJobs.keys[indexPath.section]
+    job = @project.delayedJobs[queue][indexPath.row]
+    cell.textLabel.text = "ID:#{job[:id]},#{job[:queue]} "
     cell
   end
 
   def tableView(tableView, numberOfRowsInSection:section)
+    queue = @project.delayedJobs.keys[section]
+    @project.delayedJobs[queue].size
+  end
+
+  def numberOfSectionsInTableView(tableView)
+    puts @project.delayedJobs.size
     @project.delayedJobs.size
+  end
+
+  def tableView(tableView, titleForHeaderInSection:section)
+    @project.delayedJobs.keys[section]
   end
 
 end
