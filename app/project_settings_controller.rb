@@ -13,6 +13,7 @@ class ProjectSettingsController < UITableViewController
 
   def viewWillAppear(animated)
     super
+    tableView.reloadData
 
     @request = APIRequest.new("#{@project.djMonURL}/dj_reports/settings", @project.username, @project.password)
     @request.execute

@@ -12,7 +12,7 @@ class ProjectsStore
                     errorPtr = Pointer.new(:object)
                     data = @context.executeFetchRequest(request, error:errorPtr)
                     if data.nil?
-                      raise "Error when fetch data: #{errorPtr[0].description}"
+                      raise "Error fetching data: #{errorPtr[0].description}"
                     end
                     data
                   end

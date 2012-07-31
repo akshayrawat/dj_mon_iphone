@@ -23,11 +23,11 @@ class Project < NSManagedObject
   end
 
   def awakeFromInsert
-    @delayedJobCounts, @settings, @delayedJobs = {}, {}, {}
+    @delayedJobCounts, @settings, @delayedJobs = {}, {}, Hash.new([])
   end
 
   def awakeFromFetch
-    @delayedJobCounts, @settings, @delayedJobs = {}, {}, {}
+    @delayedJobCounts, @settings, @delayedJobs = {}, {}, Hash.new([])
   end
 
 end

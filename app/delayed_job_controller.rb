@@ -15,8 +15,8 @@ class DelayedJobController < UITableViewController
 
   def viewWillAppear(animated)
     super
-    navigationItem.title = "##{@delayedJob['id']}"
     tableView.reloadData
+    navigationItem.title = "##{@delayedJob['id']}"
   end
 
   CELL_ID = "DelayedJobTableCell"
