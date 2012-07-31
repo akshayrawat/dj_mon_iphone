@@ -22,8 +22,16 @@ class PayloadController < UITableViewController
       cell.selectionStyle = UITableViewCellSelectionStyleNone
       cell
     end
-    cell.textLabel.text = indexPath.section == 0 ? @delayedJob['payload'] : @delayedJob['last_error']
+
+    textView = UITextView.alloc.initWithFrame([[5, 5], [280, 145]])
+    textView.editable = false
+    textView.text = indexPath.section == 0 ? @delayedJob['payload'] : @delayedJob['last_error']
+    cell.contentView.addSubview(textView)
     cell
+  end
+
+  def tableView(tableView, heightForRowAtIndexPath:indexPath)
+    155
   end
 
   def tableView(tableView, numberOfRowsInSection:section)
