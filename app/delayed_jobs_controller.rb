@@ -55,4 +55,15 @@ class DelayedJobsController < UITableViewController
     @project.delayedJobs.keys[section]
   end
 
+  def tableView(tableView, didSelectRowAtIndexPath:indexPath)
+    @delayedJobController ||= DelayedJobController.alloc.initWithStyle(UITableViewStyleGrouped)
+
+    queue = @project.delayedJobs.keys[indexPath.section]
+    job = @project.delayedJobs[queue][indexPath.row]
+
+    @delayedJobController.selectedDelayedJob(job)
+    self.navigationController.pushViewController(@delayedJobController, animated: true)
+    tableView.deselectRowAtIndexPath(indexPath, animated: true)
+  end
+
 end
