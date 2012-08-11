@@ -9,10 +9,10 @@ class NewProjectController < UIViewController
 
     @tableView.delegate = @tableView.dataSource = self
 
-    @name     = buildTextFieldWithPlaceholder("Project name", keyboardType:UIKeyboardTypeAlphabet, returnKeyType:UIReturnKeyNext, isSecure:false)
+    @name     = buildTextFieldWithPlaceholder("Project name", keyboardType:UIKeyboardTypeASCIICapable, returnKeyType:UIReturnKeyNext, isSecure:false)
     @djMonURL = buildTextFieldWithPlaceholder("URL eg: http://yourapp.com/dj_mon", keyboardType:UIKeyboardTypeURL, returnKeyType:UIReturnKeyNext, isSecure:false)
-    @username = buildTextFieldWithPlaceholder("Username", keyboardType:UIKeyboardTypeAlphabet, returnKeyType:UIReturnKeyNext, isSecure:false)
-    @password = buildTextFieldWithPlaceholder("Password", keyboardType:UIKeyboardTypeAlphabet, returnKeyType:UIReturnKeyDone, isSecure:true)
+    @username = buildTextFieldWithPlaceholder("Username", keyboardType:UIKeyboardTypeASCIICapable, returnKeyType:UIReturnKeyNext, isSecure:false)
+    @password = buildTextFieldWithPlaceholder("Password", keyboardType:UIKeyboardTypeASCIICapable, returnKeyType:UIReturnKeyDone, isSecure:true)
     #@password.enablesReturnKeyAutomatically = true
 
     view.addSubview @tableView
