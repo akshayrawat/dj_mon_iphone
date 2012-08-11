@@ -5,6 +5,8 @@ class APIRequest
   end
 
   def execute
+    UIApplication.sharedApplication.networkActivityIndicatorVisible = true
+
     authData = "#{@username}:#{@password}".dataUsingEncoding(NSASCIIStringEncoding)
     authValue = "Basic #{authData.base64Encoding}"
     url = NSURL.URLWithString(@djMonURL)
@@ -33,10 +35,12 @@ class APIRequest
   end
 
   def connectionDidFinishLoading(connection)
+    UIApplication.sharedApplication.networkActivityIndicatorVisible = false
     @success ? @successHandler.call(parseJSON(@data)) : @failureHandler.call
   end
 
   def connection(connection, didFailWithError:error)
+    UIApplication.sharedApplication.networkActivityIndicatorVisible = false
     @failureHandler.call
   end
 
