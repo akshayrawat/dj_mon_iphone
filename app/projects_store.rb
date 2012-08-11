@@ -1,7 +1,11 @@
 class ProjectsStore
 
   def self.shared
-    @shared ||= ProjectsStore.new
+    @shared ||= begin
+      store = ProjectsStore.new
+      store.seed if store.projects.size.zero?
+      store
+    end
   end
 
   def projects
@@ -36,17 +40,26 @@ class ProjectsStore
     @projects = nil
   end
 
+  def seed
+    newProject do |project|
+      project.name =  "Demo Project"
+      project.djMonURL = "http://dj-mon-demo.herokuapp.com/dj_mon"
+      project.username = "dj_mon"
+      project.password = "password"
+    end
+  end
+
   private
 
   def initialize
     model = NSManagedObjectModel.alloc.init
     model.entities = [ Project.entity ]
     store = NSPersistentStoreCoordinator.alloc.initWithManagedObjectModel(model)
-    store_url = NSURL.fileURLWithPath(File.join(NSHomeDirectory(), 'Documents', 'DJMon.sqlite'))
-    error_ptr = Pointer.new(:object)
+    storeUrl = NSURL.fileURLWithPath(File.join(NSHomeDirectory(), 'Documents', 'DJMon.sqlite'))
 
-    unless store.addPersistentStoreWithType(NSSQLiteStoreType, configuration:nil, URL:store_url, options:nil, error:error_ptr)
-      raise "Can't add persistent SQLite store: #{error_ptr[0].description}"
+    errorPtr = Pointer.new(:object)
+    unless store.addPersistentStoreWithType(NSSQLiteStoreType, configuration:nil, URL:storeUrl, options:nil, error:errorPtr)
+      raise "Can't add persistent SQLite store: #{errorPtr[0].description}"
     end
 
     context = NSManagedObjectContext.alloc.init
