@@ -1,6 +1,11 @@
-# DJ Mon iPhone
+## DJ Mon iPhone
 
-An iPhone client for [DJ Mon](https://github.com/akshayrawat/dj_mon). Lets you view and manage delayed jobs from your iPhone, has all the features on the `dj_mon` web ui. Requires installation of the [dj_mon gem](https://github.com/akshayrawat/dj_mon).
+An iPhone client for [DJ Mon](https://github.com/akshayrawat/dj_mon). 
 
-### Current Status
-Waiting for approval by Apple
+* [Tour](http://www.akshay.cc/dj_mon/)
+* [App Store](http://itunes.apple.com/app/dj-mon/id552732872)
+
+### Roadmap
+
+* Use [Frank](http://testingwithfrank.com/) to write some freaking tests.
+* Use the DJ Mon API to implement deleting and restarting delayed jobs.
