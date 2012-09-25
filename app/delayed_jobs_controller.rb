@@ -15,6 +15,10 @@ class DelayedJobsController < UITableViewController
 
     navigationItem.title = "#{@status.capitalize} Jobs"
 
+    loadData
+  end
+
+  def loadData
     @request = APIRequest.new("#{@project.djMonURL}/dj_reports/#{@status}", @project.username, @project.password)
     @request.execute
 
