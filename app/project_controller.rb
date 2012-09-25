@@ -8,7 +8,7 @@ class ProjectController < UITableViewController
     super
 
     view.dataSource = view.delegate = self
-    navigationItem.title = "Delayed Jobs"
+    navigationItem.title = @project.name
 
     @projectSettings = UIBarButtonItem.alloc.initWithTitle("Settings", style:UIBarButtonItemStylePlain, target:self, action:'showSettings')
     navigationItem.rightBarButtonItem = @projectSettings
@@ -63,7 +63,7 @@ class ProjectController < UITableViewController
   end
 
   def tableView(tableView, titleForHeaderInSection:section)
-    @project.name
+    "Delayed Jobs"
   end
 
 end
