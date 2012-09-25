@@ -2,3 +2,4 @@ build/
 .repl_history
 tags
 *.DS_Store
+.dat*
