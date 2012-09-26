@@ -50,9 +50,10 @@ class ProjectsController < UITableViewController
     tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation:UITableViewRowAnimationFade)
   end
 
-  def newProject
+  def newProject(defaults = nil)
     @newProjectController ||= NewProjectController.alloc.init
     self.navigationController.pushViewController(@newProjectController, animated: true)
+    @newProjectController.setProjectDefaults(defaults)
   end
 
   def projects

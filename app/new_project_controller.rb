@@ -42,6 +42,15 @@ class NewProjectController < UIViewController
     end
   end
 
+  def setProjectDefaults(defaults)
+    if defaults.is_a? Hash
+      @name.text = defaults["name"].to_s
+      @djMonURL.text = defaults["url"].to_s
+      @username.text = defaults["user"].to_s
+      @password.text = defaults["password"].to_s
+    end
+  end
+
   def textFieldShouldReturn(textField)
     changeFirstResponderTo(@djMonURL, from:@name) if textField == @name
     changeFirstResponderTo(@username, from:@djMonURL) if textField == @djMonURL
