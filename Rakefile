@@ -5,6 +5,7 @@ require 'motion/project'
 Motion::Project::App.setup do |app|
   app.name = 'DJ Mon'
   app.version = '1.0'
+  app.sdk_version = '6.0'
   app.deployment_target = '5.1'
   app.frameworks += [ 'CoreData' ]
   app.identifier = 'cc.akshay.djmon'
