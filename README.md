@@ -1,3 +1,6 @@
+> This project is no longer maintained. Please use the web ui `dj_mon` instead.
+
+
 ## DJ Mon iPhone
 
 An iPhone client for [DJ Mon](https://github.com/akshayrawat/dj_mon). 
