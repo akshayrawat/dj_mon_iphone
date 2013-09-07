@@ -1,4 +1,4 @@
-> This project is no longer maintained. Please use the web ui `dj_mon` instead.
+> This project is no longer maintained. Please use the web ui [dj_mon](https://github.com/akshayrawat/dj_mon) instead.
 
 
 ## DJ Mon iPhone
