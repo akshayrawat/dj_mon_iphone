@@ -6,6 +6,10 @@ class DelayedJobsController < UITableViewController
 
   def viewDidLoad
     super
+    if defined? UIRefreshControl
+      self.refreshControl = UIRefreshControl.new
+      refreshControl.addTarget(self, action:'refresh:', forControlEvents:UIControlEventValueChanged)
+    end
     view.dataSource = view.delegate = self
   end
 
@@ -15,16 +19,27 @@ class DelayedJobsController < UITableViewController
 
     navigationItem.title = "#{@status.capitalize} Jobs"
 
+    loadData
+  end
+
+  def refresh(sender)
+    refreshControl.beginRefreshing if defined? UIRefreshControl
+    loadData
+  end
+
+  def loadData
     @request = APIRequest.new("#{@project.djMonURL}/dj_reports/#{@status}", @project.username, @project.password)
     @request.execute
 
     @request.onSuccess do |data|
       @project.delayedJobs[@status] = data.group_by { |d| d[:queue] }
+      refreshControl.endRefreshing if defined? UIRefreshControl
       tableView.reloadData
     end
 
     @request.onFailure do
       alertView = UIAlertView.alloc.initWithTitle("API Request failed", message:"API Request failed", delegate:nil, cancelButtonTitle:"Ok", otherButtonTitles:nil)
+      refreshControl.endRefreshing if defined? UIRefreshControl
       alertView.show
     end
   end
